@@ -1,0 +1,2 @@
+export function classNames(...classes :any) { return classes.filter(Boolean).join(' '); }
+export const toTitleCase = (str: string): string => str?.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
