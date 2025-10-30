@@ -4,44 +4,48 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { ReactTransliterate } from "react-transliterate";
 import { Editor } from 'primereact/editor';
 import { useAppDispatch } from '@/store';
+import { supabase } from '@/lib/supabaseClient';
+import { Article, Author, Tag } from '@/app/utils/interfaces';
 
-const articleObj = {article_type_id: '', raag_id: '', scripture_id: '', index: '', context_id: 1, 
-	author_id: 9, hindi_title: '', english_title: '', content: '', interpretation: '', tags: []
-};
+const articleObj: Article = {author_id: null, tag_id: null, title: '', content: ''};
 
 const AddArticle = () => {
 	// const dispatch = useAppDispatch();
+	const [formValues, setFormValues] = useState<Article>(articleObj);
+	const [authors, setAuthors] = useState<Author[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+	
+	useEffect(() => {
+    const fetchData = async () => {
+      const { data: authorData, error } = await supabase.from("authors").select("*");
+      const { data: tagData } = await supabase.from("tags").select("*");
 
-	const [contentText, setContentText] = useState<string>("");
-	const [formValues, setFormValues] = useState(articleObj);
-	const [newTag, setNewTag] = useState('');
-	const [selectedTags, setSelectedTags] = useState([]);
-	const [tagFormDisplay,setTagFormDisplay] = useState(false);
-	const [searchArticleList, setSearchArticleList] = useState([]);
-	const [isOpen, setIsOpen] = useState(false);
+      setAuthors(authorData || []);
+      setTags(tagData || []);
+    };
+    fetchData();
+  }, []);
 
-
-	// useEffect( () => { dispatch(newArticle());}, [dispatch]);
-
-	const setEditorValues = (name: string, value: string) => {
-		setFormValues(formValues => ({ ...formValues, [name]: value }));
-	}
-
-	const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+	const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
 		setFormValues({ ...formValues, [name]: value });
 	}
 
-	const resetForm = () => { setSelectedTags([]);setFormValues(articleObj); }
+	const resetForm = () => {setFormValues(articleObj); }
 	const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { event.preventDefault(); resetForm();}
 
-	const onArticleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+	const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		let form = {}
-		// for (const [key, value] of Object.entries(formValues)) { 
-		// 	form[key] = (typeof(value) == "string") ? value.trim() : value;
-		// }
-		// form['tags'] = selectedTags.map(tag => tag.value);
+
+  	const { data: article, error } = await supabase.from('articles').insert([formValues]).select();
+		if (error) {
+			console.error('Error inserting article:', error.message);
+		} else if (article && article.length > 0) {
+			resetForm();
+			const articleObj = article[0];
+			console.log('Article inserted:', articleObj);
+			
+		}
 	}
 
 
@@ -80,23 +84,18 @@ const AddArticle = () => {
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
 								Author <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
-							{/* <select id="article_type_id" name="article_type_id" 
-								value={formValues.article_type_id || ''}
+							<select
+								name="author_id"
+								value={formValues.author_id || ''}
 								onChange={onInputChange}
 								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-									rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 
-									dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-									dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 
-									dark:shadow-sm-light`} required>
-									<option value="">रचना प्रकार चुने</option>
-									{
-										article_types && article_types.map( (aType, index) => 
-											<option key={index} value={aType.id}>{aType.name}</option>
-										)
-									}
-							</select> */}
-							<input type="text" className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} ></input>
+								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
+							>
+								<option value="">Select Author</option>
+								{authors.map((a) => (
+									<option key={a.id} value={a.id}>{a.name}</option>
+								))}
+							</select>
 						</div>
 					</div>
 					<div className='grid md:grid-cols-12 gap-6 mb-3'>
@@ -104,8 +103,18 @@ const AddArticle = () => {
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
 								Tag <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
-							<input type="text" className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} ></input>
+							<select
+								name="tag_id"
+								value={formValues.tag_id || ''}
+								onChange={onInputChange}
+								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
+								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
+							>
+								<option value="">Select Author</option>
+								{tags.map((a) => (
+									<option key={a.id} value={a.id}>{a.tag}</option>
+								))}
+							</select>
 						</div>
 					</div>
 					<div className='grid md:grid-cols-12 gap-6 mb-3'>
@@ -113,8 +122,8 @@ const AddArticle = () => {
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
 								Title <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
-							<input type="text" id="english_title" name="english_title"
-								value={formValues.english_title}
+							<input type="text" id="title" name="title"
+								value={formValues.title}
 								onChange={onInputChange}
 								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
 								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} required />
@@ -125,8 +134,12 @@ const AddArticle = () => {
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
 								Content <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
-							<textarea className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} rows={5} />
+							<textarea name="content" 
+								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
+								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} 
+								onChange={onInputChange} 
+								value={formValues.content || ''} 
+								rows={5}></textarea>
 						</div>
 					</div>
 					<div className='mb-3'>
