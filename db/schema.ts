@@ -30,12 +30,12 @@ export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   content: text("content"),
-  authorId: integer("author_id")
-    .notNull()
+  authorId: integer("author_id").notNull()
     .references(() => authors.id, { onDelete: "cascade" }), // foreign key
-  tagId: integer("tag_id")
-    .notNull()
+  tagId: integer("tag_id").notNull()
     .references(() => tags.id, { onDelete: "cascade" }), // foreign key
+  userId: integer("user_id").notNull()
+    .references(() => users.id, { onDelete: "set null" }), // foreign key
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
 });

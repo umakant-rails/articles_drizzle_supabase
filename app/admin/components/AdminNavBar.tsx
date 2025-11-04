@@ -48,8 +48,8 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }
             <div aria-hidden="true" className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10" />
 
             {/* Profile dropdown */}
-            <Menu as="div" className="relative">
-              <MenuButton className="-m-1.5 flex items-center p-1.5">
+            <Menu as="div" className="relative" suppressHydrationWarning>
+              <MenuButton className="-m-1.5 flex items-center p-1.5" suppressHydrationWarning>
                 <span className="sr-only">Open user menu</span>
                 <div className="size-8 rounded-full bg-gray-50 overflow-hidden relative">
                   <Image
@@ -68,7 +68,7 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }
                 </span> */}
               </MenuButton>
               <MenuItems
-                transition
+                transition suppressHydrationWarning
                 className="absolute right-0 z-10 mt-2.5 w-44 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
               >
                 <MenuItem>

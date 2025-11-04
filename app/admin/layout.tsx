@@ -26,6 +26,7 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { classNames } from '@/app/utils/utilityFunctions'
 import LayoutComponentComposer from './components/LayoutComponentComposer'
+import { Providers } from '../providers'
 
 const navigation = [
   { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
@@ -51,7 +52,9 @@ export default function AdminLayout({ children,}: Readonly<{children: React.Reac
   return (
     <>
       <div>
-        <LayoutComponentComposer children={children} />
+        <Providers>
+          <LayoutComponentComposer children={children} />
+        </Providers>
       </div>
     </>
   )

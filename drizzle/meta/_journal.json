@@ -5,8 +5,22 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1762005867775,
-      "tag": "0000_previous_sentinels",
+      "when": 1762007746640,
+      "tag": "0000_neat_jackal",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1762249184428,
+      "tag": "0001_free_warhawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1762249223161,
+      "tag": "0002_petite_the_executioner",
       "breakpoints": true
     }
   ]

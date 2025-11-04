@@ -40,7 +40,7 @@ dotenv.config({ path: ".env.local" });
 
 const client = postgres(process.env.DATABASE_URL!, {
   ssl: { rejectUnauthorized: false },
-  host: "db.cxtcuhclovblzcjkzxwk.supabase.co",
+  host: "db.lowotklmfngpohepyvdo.supabase.co", 
   // ipv6: false 
 });
 
