@@ -1,6 +1,8 @@
 import { combineReducers } from "@reduxjs/toolkit";
 import adminTagSlice from "./admin/adminTagSlice";
+import adminAuthorSlice from "./admin/adminAuthorSlice";
 
 export default combineReducers({
-  adminTags: adminTagSlice, 
+  adminTag: adminTagSlice,
+  adminAuthor: adminAuthorSlice
 });

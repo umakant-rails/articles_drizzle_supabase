@@ -2,78 +2,66 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { NewTag, Tag, UpdateTag } from '@/app/utils/interfaces';
+import { NewAuthor, Author, UpdateAuthor } from '@/app/utils/interfaces';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { createAdminTag, deleteAdminTag, getAdminTags, updateAdminTag } from '@/app/slilces/admin/adminTagSlice';
+import { createAdminAuthor, deleteAdminAuthor, getAdminAuthors, updateAdminAuthor } from '@/app/slilces/admin/adminAuthorSlice';
 import { useAppDispatch, useAppSelector } from '@/store';
-// import { ITEM_PER_PAGE } from '@/utils/types';
-// import Pagination from '@/app/shared/Pagination';
-// import { ReactTransliterate } from "react-transliterate";
-// import { confirmBeforeDeletion } from '@/utils/utilityFunctions';
-// import { 
-//   deleteTag, 
-//   getTags, 
-//   createTag, 
-//   updateTag 
-// } from '@/slices/user/userTagSlice';
 
-const tagObj = {name: ''};
-
-const TagList = () => {
+const AuthorList = () => {
   const dispatch = useAppDispatch();
   const aphabetList = "अ इ उ ऋ ए क ख ग घ च छ ज झ ट ठ ड ढ त थ द ध न प फ ब भ म य र ल व श ष स ह क्ष त्र ज्ञ श्र".split(' ');
   const [currentPage, setCurrentPage] = useState(1);
-  const tagObj: NewTag = {name: ''};
+  const authorObj: NewAuthor = {name: '', biography: ''};
   const [open, setOpen] = useState(false)
-  const [tagList, setTagList] = useState<Tag []>([]);
+  const [authorList, setAuthorList] = useState<Author []>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [totalTagQnty, setTotalTagQnty] = useState(0);
+  const [totalAuthorQnty, setTotalAuthorQnty] = useState(0);
 
-  const [formValues, setFormValues] = useState<NewTag>(tagObj);
-  const [editableTag, setEditableTag] = useState<Tag>();
+  const [formValues, setFormValues] = useState<NewAuthor>(authorObj);
+  const [editableAuthor, setEditableAuthor] = useState<Author>();
   const drawerCloseBtn = useRef(null);
-  const { tags } = useAppSelector( state => state.adminTag);
+  const { authors } = useAppSelector( state => state.adminAuthor);
 
-  useEffect( () => { getAllTags(); }, []);
+  useEffect( () => { getAllAuthors(); }, []);
 
-  const getAllTags = () => {
-    dispatch(getAdminTags({})).then( res => { setTagList(res?.payload.tags); });
+  const getAllAuthors = () => {
+    dispatch(getAdminAuthors({})).then( res => { setAuthorList(res?.payload.authors); });
   }
-  const setTagForEditing = (id: number) => {
-    const tagForEditing = tagList.find( tag => tag.id === id)
-    setEditableTag(tagForEditing);
-    setFormValues( {...formValues, name: tagForEditing?.name || ''});
+  const setAuthorForEditing = (id: number) => {
+    const authorForEditing = authorList.find( author => author.id === id)
+    setEditableAuthor(authorForEditing);
+    setFormValues( {...formValues, name: authorForEditing?.name || '', biography: authorForEditing?.biography});
   }
-  const deleteToTag = (id: number) => {
-    dispatch(deleteAdminTag(id)).then(res => {
+  const deleteToAuthor = (id: number) => {
+    dispatch(deleteAdminAuthor(id)).then(res => {
       const data = res.payload;
-      const udpateList = tagList.filter(tag => tag.id !== id );
-      setTagList(udpateList);
+      const udpateList = authorList.filter(author => author.id !== id );
+      setAuthorList(udpateList);
     })
   }
 
-  const updateToTag = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const updateToAuthor = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsLoading(true);
-    if(!editableTag?.id) {return}
+    if(!editableAuthor?.id) {return}
 
-    dispatch(updateAdminTag({ id: editableTag.id, form: formValues })).then(res => {
+    dispatch(updateAdminAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
       const data = res.payload;
-      const udpateList = tagList.map(tag =>
-        tag.id === data.tag.id ? data.tag : tag
+      const udpateList = authorList.map(author =>
+        author.id === data.author.id ? data.author : author
       );
-      setTagList(udpateList);setOpen(false);
+      setAuthorList(udpateList);setOpen(false);
     })
   }
 
-  const createNewTag =  async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const createNewAuthor =  async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
-    dispatch(createAdminTag(formValues)).then(res => {
-      const tag = res.payload.tag;
-      getAllTags();
-      setOpen(false); setFormValues(tagObj);
+    dispatch(createAdminAuthor(formValues)).then(res => {
+      const author = res.payload.author;
+      getAllAuthors();
+      setOpen(false); setFormValues(authorObj);
     })
   }
 
@@ -94,7 +82,7 @@ const TagList = () => {
                   <div className="px-2 py-4 sm:px-6 bg-blue-800 text-white z-100">
                     <div className="flex items-start justify-between">
                       <h2 id="drawer-title" className={`text-base font-semibold bg-blue-800 text-white`}>
-                        { editableTag ? 'Tag Updation Form' : 'Tag Form'}
+                        { editableAuthor ? 'Author Updation Form' : 'Author Form'}
                       </h2>
                       <div className="ml-3 flex h-7 items-center">
                         <button type="button" onClick={e => setOpen(false)}
@@ -132,18 +120,35 @@ const TagList = () => {
                               />
                             </div>
                           </div>
+                          <div className='grid md:grid-cols-12 mb-3'>
+                            <div className='col-span-12'>
+                              <label className="block mb-2 font-medium text-gray-900 dark:text-white">
+                                Descrition <span title="required" className="text-red-600 font-bold">*</span>
+                              </label>
+                            </div>
+                            <div className='col-span-12'>
+                              <textarea
+                                value={formValues.biography || ''}
+                                onChange={e => { setFormValues(formValues => ({...formValues, biography: e.target.value})) }}
+                                className={`block w-full p-2.5 text-gray-900 border border-gray-300 
+                                  rounded bg-gray-50 focus:ring-blue-500 focus:border-blue-500 
+                                  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
+                                  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500`}
+                              />
+                            </div>
+                          </div>
                         </form>
                       </div>
                       <div className="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                         { 
-                          editableTag ? ( <button type="button"
-                            onClick={updateToTag} 
+                          editableAuthor ? ( <button type="button"
+                            onClick={updateToAuthor} 
                             className="mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Update Tag
+                            Update Author
                           </button>) : ( <button type="button"
-                            onClick={createNewTag} 
+                            onClick={createNewAuthor} 
                             className="mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            Add Tag
+                            Add Author
                           </button> ) 
                         }
                         <button onClick={e => setOpen(false)}
@@ -187,11 +192,11 @@ const TagList = () => {
               </div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <div className="flex items-center space-x-3 w-full md:w-auto">
-                  <button onClick={ e => { setTagForEditing(-1); setOpen(true)}} 
+                  <button onClick={ e => { setAuthorForEditing(-1); setOpen(true)}} 
                     className={`flex text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 
                     focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 
                     py-2 text-center dark:bg-blue-600`} type="button">
-                    Add New Tag &nbsp;&nbsp;
+                    Add New Author &nbsp;&nbsp;
                     <svg className="w-6 h-6 text-white dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 7.8v8.4M7.8 12h8.4m4.8 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
@@ -210,21 +215,21 @@ const TagList = () => {
                 </thead>
                 <tbody className='text-xl'>
                   {
-                    tagList.length > 0 ? tagList.map( (tag, index) => 
+                    authorList.length > 0 ? authorList.map( (author, index) => 
                      <tr key={index} 
                         className="border-b border-gray-400 text-gray-800 cursor-pointer" >
                         <td className='px-2 py-3'>{(currentPage-1)*10 + (index+1)}</td>
                         <td
                           className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {tag.name}
+                            {author.name}
                         </td>
                         <td className="px-2 py-3 flex items-center justify-end">
-                          <button type="button" onClick={e => {setTagForEditing(tag.id); setOpen(true)}} >
+                          <button type="button" onClick={e => {setAuthorForEditing(author.id); setOpen(true)}} >
                             <svg className="w-[30px] h-[30px] text-blue-500 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m14.3 4.8 2.9 2.9M7 7H4a1 1 0 0 0-1 1v10c0 .6.4 1 1 1h11c.6 0 1-.4 1-1v-4.5m2.4-10a2 2 0 0 1 0 3l-6.8 6.8L8 14l.7-3.6 6.9-6.8a2 2 0 0 1 2.8 0Z"/>
                             </svg>
                           </button>
-                          <Link href="#" onClick={e => deleteToTag(tag.id)}>
+                          <Link href="#" onClick={e => deleteToAuthor(author.id)}>
                             <svg className="w-[30px] h-[30px] text-red-500 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
                             </svg>
@@ -244,10 +249,10 @@ const TagList = () => {
             </div>
             <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
               {/* {
-                totalTagQnty ? (
+                totalAuthorQnty ? (
                   <Pagination 
                     showWidget={5} 
-                    totalItems={totalTagQnty}
+                    totalItems={totalAuthorQnty}
                     itemsPerPage={ITEM_PER_PAGE}
                     pageChangeHandler= {handlePageClick}
                   />) : ''
@@ -262,4 +267,4 @@ const TagList = () => {
   );
 };
 
-export default TagList;
+export default AuthorList;
