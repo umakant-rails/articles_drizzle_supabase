@@ -1,41 +1,45 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { Article, Author, Tag } from '@/app/utils/interfaces';
+import { Article, Author, NewArticle, Tag, UpdateArticle } from '@/app/utils/interfaces';
 import { useParams, useRouter} from 'next/navigation';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { getArticle, getArticleBasicData, getArticles, updateAdminArticle } from '@/app/slilces/admin/adminArticleSlice';
+import { getAdminAuthors } from '@/app/slilces/admin/adminAuthorSlice';
+import { getAdminTags } from '@/app/slilces/admin/adminTagSlice';
 
-const articleObj: Article = {author_id: null, tag_id: null, title: '', content: ''};
+const articleObj: NewArticle = { 
+  authorId: 0,
+  userId: 1,
+  tagId: 0,
+  title: "",
+  content: "",
+};
 
 const ArticleEdit = () => {
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const { id } = useParams();
   const router = useRouter();
-  const [formValues, setFormValues] = useState<Article>(articleObj);
+  const [formValues, setFormValues] = useState<NewArticle>(articleObj);
   const [authors, setAuthors] = useState<Author[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
+  const {article} = useAppSelector( state => state.adminArticle);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data: article, error } = await supabase.from("articles").select("*") .eq('id', id).single();
-      const { data: authors } = await supabase.from("authors").select("*") ;
-      const { data: tags } = await supabase.from("tags").select("*");
-      if (error) {
-        console.error('Error face during the article fetching:', error.message);
-      } else if (article.id) {
-        setAuthors(authors || []);
-        setTags(tags || []);
-        const obj = {
-          tag_id: article.tag_id, 
-          author_id: article.author_id,
-          title: article.title,
-          content: article.content
-        }
-        setFormValues(obj);
-      }
-    };
-    fetchData();
+    dispatch(getAdminAuthors()).then(response => setAuthors(response.payload.authors) );
+    dispatch(getAdminTags()).then(response => setTags(response.payload.tags) );
+    dispatch(getArticle(id)).then(response => {
+      const article = response.payload.article;
+      setFormValues({...formValues,
+        authorId: article.authorId,
+        tagId: article.authorId,
+        title: article.title,
+        content: article.content,
+      })
+    })
   }, [id]);
 
+  // const fetchArticles = async () => { dispatch(getArticles()); };
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
@@ -46,15 +50,16 @@ const ArticleEdit = () => {
 
   const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const { data: article, error } = await supabase.from('articles').update([formValues]) .eq('id', id).select();;
-    if (error) {
-      console.error('Error inserting article:', error.message);
-    } else if (article && article.length > 0) {
-      resetForm();
-      const articleObj = article[0];
-      router.push(`/admin/articles`)
-    }
+    dispatch(updateAdminArticle({id: id, form :formValues})).then(res => {
+      router.push('/admin/articles');
+    })
+    // dispatch(updateAdminAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
+    //   const data = res.payload;
+    //   const udpateList = authorList.map(author =>
+    //     author.id === data.author.id ? data.author : author
+    //   );
+    //   setAuthorList(udpateList);setOpen(false);
+    // })
   }
 
 
@@ -66,10 +71,10 @@ const ArticleEdit = () => {
           रचना अद्यतन फॉर्म
         </div>
         {
-          !formValues.tag_id && <div> Data is Loading ... </div>
+          !formValues.title && <div> Data is Loading ... </div>
         }
         {
-          formValues.tag_id && <form className="py-5 px-5" onSubmit={onArticleSubmit}>
+          formValues.tagId && <form className="py-5 px-5" onSubmit={onArticleSubmit}>
             <div className='grid md:grid-cols-12 gap-6 mb-3'>
               <div className="col-span-6">
                 <label className="block mb-2 font-medium text-gray-900 dark:text-white">
@@ -77,7 +82,7 @@ const ArticleEdit = () => {
                 </label>
                 <select
                   name="author_id"
-                  value={formValues.author_id || ''}
+                  value={formValues.authorId || ''}
                   onChange={onInputChange}
                   className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                   rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
@@ -96,14 +101,14 @@ const ArticleEdit = () => {
                 </label>
                 <select
                   name="tag_id"
-                  value={formValues.tag_id || ''}
+                  value={formValues.tagId || ''}
                   onChange={onInputChange}
                   className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                   rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
                 >
                   <option value="">Select Author</option>
                   {tags.map((a) => (
-                    <option key={a.id} value={a.id}>{a.tag}</option>
+                    <option key={a.id} value={a.id}>{a.name}</option>
                   ))}
                 </select>
               </div>
@@ -114,7 +119,7 @@ const ArticleEdit = () => {
                   Title <span title="required" className="text-red-600 font-bold">*</span>
                 </label>
                 <input type="text" id="title" name="title"
-                  value={formValues.title}
+                  value={formValues.title || ''}
                   onChange={onInputChange}
                   className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
                   rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} required />

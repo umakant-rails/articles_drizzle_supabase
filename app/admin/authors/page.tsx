@@ -62,7 +62,7 @@ const AuthorList = () => {
       const author = res.payload.author;
       getAllAuthors();
       setOpen(false); setFormValues(authorObj);
-    })
+    });
   }
 
   const popFunc= () => {

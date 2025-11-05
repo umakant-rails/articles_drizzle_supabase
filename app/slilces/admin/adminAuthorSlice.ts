@@ -72,18 +72,7 @@ export const deleteAdminAuthor = createAsyncThunk(
       return data; // ✅ this becomes action.payload in reducers
     } catch (error: any) {
       // dispatch(showError(error.message || "Failed to load authors"));
-      // return rejectWithValue(error.message);
-      if (error.response) {
-        // Server responded with a status outside 2xx
-        console.error("Server error:", error.response.data);
-        console.error("Status code:", error.response.status);
-      } else if (error.request) {
-        // Request was made but no response received
-        console.error("No response received:", error.request);
-      } else {
-        // Something happened in setting up the request
-        console.error("Error setting up request:", error.message);
-      }
+      return rejectWithValue(error.message);
     }
   }
 );

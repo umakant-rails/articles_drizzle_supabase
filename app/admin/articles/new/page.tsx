@@ -3,32 +3,34 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 // import { ReactTransliterate } from "react-transliterate";
 import { Editor } from 'primereact/editor';
-import { useAppDispatch } from '@/store';
+import { useAppDispatch, useAppSelector } from '@/store';
 import { supabase } from '@/lib/supabaseClient';
-import { Article, Author, Tag } from '@/app/utils/interfaces';
+import { NewArticle } from '@/app/utils/interfaces';
+import { createArticle, getArticleBasicData } from '@/app/slilces/admin/adminArticleSlice';
+import { useRouter } from 'next/navigation';
 
-const articleObj: Article = {author_id: null, tag_id: null, title: '', content: ''};
+
+const articleObj: NewArticle = { 
+	authorId: 0,
+	userId: 1,
+	tagId: 0,
+	title: "",
+	content: "",
+};
 
 const AddArticle = () => {
-	// const dispatch = useAppDispatch();
-	const [formValues, setFormValues] = useState<Article>(articleObj);
-	const [authors, setAuthors] = useState<Author[]>([]);
-  const [tags, setTags] = useState<Tag[]>([]);
-	
-	useEffect(() => {
-    const fetchData = async () => {
-      const { data: authorData, error } = await supabase.from("authors").select("*");
-      const { data: tagData } = await supabase.from("tags").select("*");
+	const dispatch = useAppDispatch();
+	const router = useRouter();
+	const [formValues, setFormValues] = useState<NewArticle>(articleObj);
+	const {tags, authors} = useAppSelector(state => state.adminArticle)
 
-      setAuthors(authorData || []);
-      setTags(tagData || []);
-    };
-    fetchData();
-  }, []);
+	useEffect(() => {dispatch(getArticleBasicData({})); }, []);
 
 	const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
-		setFormValues({ ...formValues, [name]: value });
+		if(name === "tagId" || name === "authorId"){
+			setFormValues({ ...formValues, [name]: Number(value) }); 
+		} else { setFormValues({ ...formValues, [name]: value }); }
 	}
 
 	const resetForm = () => {setFormValues(articleObj); }
@@ -37,18 +39,20 @@ const AddArticle = () => {
 	const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-  	const { data: article, error } = await supabase.from('articles').insert([formValues]).select();
-		if (error) {
-			console.error('Error inserting article:', error.message);
-		} else if (article && article.length > 0) {
-			resetForm();
-			const articleObj = article[0];
-			console.log('Article inserted:', articleObj);
-			
-		}
+  	dispatch(createArticle(formValues)).then(res => {
+			router.push('/admin/articles');
+		})
 	}
 
+	const onArticleSubmit1 = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
 
+  	dispatch(createArticle(formValues)).then(res => {
+			router.push('/admin/articles');
+		})
+	}
+
+	if(!authors){return <div>Data is Loading ....</div>}
 	return (
 		<div className='grid md:grid-cols-12'>
 			<div className='md:col-start-2 md:col-span-10 shadow-2xl bg-white border border-gray-200 p-6'>
@@ -57,36 +61,14 @@ const AddArticle = () => {
 					रचना फॉर्म
 				</div>
 				<form className="py-5 px-5" onSubmit={onArticleSubmit}>
-					{/* <div className='grid md:grid-cols-12 gap-6 mb-3'>
-						<div className="col-span-6">
-							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
-								रचना का प्रकार <span title="required" className="text-red-600 font-bold">*</span>
-							</label>
-							<select id="article_type_id" name="article_type_id" 
-								value={formValues.article_type_id || ''}
-								onChange={onInputChange}
-								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
-									rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 
-									dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 
-									dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 
-									dark:shadow-sm-light`} required>
-									<option value="">रचना प्रकार चुने</option>
-									{
-										article_types && article_types.map( (aType, index) => 
-											<option key={index} value={aType.id}>{aType.name}</option>
-										)
-									}
-							</select>
-						</div>
-					</div> */}
 					<div className='grid md:grid-cols-12 gap-6 mb-3'>
 						<div className="col-span-6">
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
 								Author <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
 							<select
-								name="author_id"
-								value={formValues.author_id || ''}
+								name="authorId"
+								value={formValues.authorId || ''}
 								onChange={onInputChange}
 								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
 								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
@@ -104,15 +86,15 @@ const AddArticle = () => {
 								Tag <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
 							<select
-								name="tag_id"
-								value={formValues.tag_id || ''}
+								name="tagId"
+								value={formValues.tagId || ''}
 								onChange={onInputChange}
 								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
 								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2 py-2.5`}
 							>
 								<option value="">Select Author</option>
 								{tags.map((a) => (
-									<option key={a.id} value={a.id}>{a.tag}</option>
+									<option key={a.id} value={a.id}>{a.name}</option>
 								))}
 							</select>
 						</div>
@@ -123,7 +105,7 @@ const AddArticle = () => {
 								Title <span title="required" className="text-red-600 font-bold">*</span>
 							</label>
 							<input type="text" id="title" name="title"
-								value={formValues.title}
+								value={formValues.title || ''}
 								onChange={onInputChange}
 								className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
 								rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2`} required />
@@ -143,7 +125,7 @@ const AddArticle = () => {
 						</div>
 					</div>
 					<div className='mb-3'>
-						<button type="submit" 
+						<button type="button" onClick={onArticleSubmit1} 
 							className="mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 							रचना जोड़े
 						</button>

@@ -28,14 +28,16 @@ export const authors = pgTable("authors", {
 
 export const articles = pgTable("articles", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: text("title"),
   content: text("content"),
-  authorId: integer("author_id").notNull()
-    .references(() => authors.id, { onDelete: "cascade" }), // foreign key
-  tagId: integer("tag_id").notNull()
-    .references(() => tags.id, { onDelete: "cascade" }), // foreign key
-  userId: integer("user_id").notNull()
+  authorId: integer("author_id")
+    .references(() => authors.id, { onDelete: "set null" }), // foreign key
+  tagId: integer("tag_id")
+    .references(() => tags.id, { onDelete: "set null" }),
+  userId: integer("user_id")
     .references(() => users.id, { onDelete: "set null" }), // foreign key
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').notNull().$onUpdate(() => new Date()),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .$onUpdate(() => new Date()),
 });

@@ -3,21 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { Article } from '@/app/utils/interfaces';
 import { supabase } from '@/lib/supabaseClient';
 import Link from 'next/link';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { deleteAdminArticle, getArticles } from '@/app/slilces/admin/adminArticleSlice';
 
 const AritcleList = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
+  const dispatch = useAppDispatch();
+  const { articles } = useAppSelector(state => state.adminArticle);
 
   useEffect( () => { fetchArticles(); }, []);
-
-  const fetchArticles = async () => {
-    const { data: articles, error } = await supabase.from("articles").select("*");
-    setArticles(articles || []);
-  };
+  const fetchArticles = async () => { dispatch(getArticles()); };
   
-  const deleteArticle = async (id?: number) => {
-    const { error } = await supabase.from('articles').delete().eq('id', id);
-    // const { data: articles, error } = await supabase.from("articles").select("*");
+  const deleteArticle = async (id: number) => {
+    dispatch(deleteAdminArticle(id)).then( async (res) => {
       await fetchArticles();
+    });
   }
 
   return (
