@@ -28,11 +28,12 @@ const ArticleEdit = () => {
   useEffect(() => {
     dispatch(getAdminAuthors()).then(response => setAuthors(response.payload.authors) );
     dispatch(getAdminTags()).then(response => setTags(response.payload.tags) );
-    dispatch(getArticle(id)).then(response => {
+    const newId = String(id)
+    dispatch(getArticle(newId)).then(response => {
       const article = response.payload.article;
       setFormValues({...formValues,
         authorId: article.authorId,
-        tagId: article.authorId,
+        tagId: article.tagId,
         title: article.title,
         content: article.content,
       })
@@ -50,16 +51,9 @@ const ArticleEdit = () => {
 
   const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(updateAdminArticle({id: id, form :formValues})).then(res => {
+    dispatch(updateAdminArticle({id: Number(id), form :formValues})).then(res => {
       router.push('/admin/articles');
     })
-    // dispatch(updateAdminAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
-    //   const data = res.payload;
-    //   const udpateList = authorList.map(author =>
-    //     author.id === data.author.id ? data.author : author
-    //   );
-    //   setAuthorList(udpateList);setOpen(false);
-    // })
   }
 
 
