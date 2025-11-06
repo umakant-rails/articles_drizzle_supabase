@@ -9,9 +9,9 @@ import { getAdminAuthors } from '@/app/slilces/admin/adminAuthorSlice';
 import { getAdminTags } from '@/app/slilces/admin/adminTagSlice';
 
 const articleObj: NewArticle = { 
-  authorId: 0,
+  authorId: null,
   userId: 1,
-  tagId: 0,
+  tagId: null,
   title: "",
   content: "",
 };
@@ -32,14 +32,13 @@ const ArticleEdit = () => {
     dispatch(getArticle(newId)).then(response => {
       const article = response.payload.article;
       setFormValues({...formValues,
-        authorId: article.authorId,
-        tagId: article.tagId,
+        authorId: article.authorId || '',
+        tagId: article.tagId || '',
         title: article.title,
         content: article.content,
       })
     })
   }, [id]);
-
   // const fetchArticles = async () => { dispatch(getArticles()); };
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
@@ -68,14 +67,14 @@ const ArticleEdit = () => {
           !formValues.title && <div> Data is Loading ... </div>
         }
         {
-          formValues.tagId && <form className="py-5 px-5" onSubmit={onArticleSubmit}>
+          formValues.title && <form className="py-5 px-5" onSubmit={onArticleSubmit}>
             <div className='grid md:grid-cols-12 gap-6 mb-3'>
               <div className="col-span-6">
                 <label className="block mb-2 font-medium text-gray-900 dark:text-white">
                   Author <span title="required" className="text-red-600 font-bold">*</span>
                 </label>
                 <select
-                  name="author_id"
+                  name="authorId"
                   value={formValues.authorId || ''}
                   onChange={onInputChange}
                   className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
@@ -94,7 +93,7 @@ const ArticleEdit = () => {
                   Tag <span title="required" className="text-red-600 font-bold">*</span>
                 </label>
                 <select
-                  name="tag_id"
+                  name="tagId"
                   value={formValues.tagId || ''}
                   onChange={onInputChange}
                   className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 
