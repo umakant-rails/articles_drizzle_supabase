@@ -2,6 +2,23 @@ import { InferInsertModel, InferSelectModel, relations } from "drizzle-orm";
 import { articles, authors, tags, users } from "@/db/schema";
 export interface Request { method: string; url: string; }
 
+export type RegisterForm = {
+  email: string;
+  username: string;
+  password: string;
+  roleId: number;
+  confirm_password: string;
+};
+
+export type RegisterErrors = {
+  username?: string;
+  email?: string;
+  password?: string;
+  confirm_password?: string;
+};
+
+export type LoginForm = {email: string, password: string}
+
 export type User = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;
 export type UpdateUser = {id: number, form: FormData | Partial<NewUser>;}
