@@ -1,11 +1,10 @@
 'use client';
-
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getArticles } from "../slilces/public/publicArticleSlice";
+import { getArticles } from "@/app/slilces/admin/adminArticleSlice";
 import Link from "next/link";
 
-export default function Home() {
+export default function ArticleList() {
   const dispatch = useAppDispatch();
   const { articles } = useAppSelector(state => state.publicArticle)
 

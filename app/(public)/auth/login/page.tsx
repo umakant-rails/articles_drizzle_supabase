@@ -12,11 +12,11 @@ const Login = () => {
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (status === "authenticated" && session?.user) {
+    if (session?.user) {
       if (session.user.roleId === 1) {
-        router.replace('/admin/articles');
+        router.push('/admin/articles');
       } else if (session.user.roleId === 2) {
-        router.replace("/");
+        router.push("/");
       }
     }
   }, [status, session, router]);
@@ -25,7 +25,7 @@ const Login = () => {
     event.preventDefault();
     const response = await signIn("credentials", {
       redirect: false,
-      callbackUrl: "/admin/dashboard",
+      callbackUrl: "/admin/articles",
       email,
       password
     });
@@ -35,7 +35,7 @@ const Login = () => {
       const role = session?.user?.roleId;
       localStorage.setItem('loginSuccess', 'You have logged in successfully.');
       if(role === 1){ router.push('/admin/articles'); }
-      else if(role === 2){ router.push('/'); }
+      else if(role === 2){ router.push('/articles'); }
     } else {
       // toast.error('Invalid Credentials.')
       alert('Invalid Credentials.')

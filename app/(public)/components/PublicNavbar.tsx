@@ -42,11 +42,13 @@ export const PublicNavbar = () => {
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
+              <Link href={'/'}>
+                <img
+                  alt="Your Company"
+                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                  className="h-8 w-auto"
+                />
+              </Link>
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
@@ -115,16 +117,9 @@ export const PublicNavbar = () => {
                         </a>
                       </MenuItem>
                       <MenuItem>
-                        {/* <a
-                          href="#"
-                          className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-300 dark:data-focus:bg-white/5"
-                        >
-                          Sign out
-                        </a> */}
                         <Link href="#" onClick={ () => signOut({ callbackUrl: '/' })} 
                           className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden dark:text-gray-300 dark:data-focus:bg-white/5">
                           <span className="mr-2">Sign Out</span>
-                          {/* <ArrowRightStartOnRectangleIcon className='size-5' /> */}
                         </Link>
                       </MenuItem>
                     </MenuItems>

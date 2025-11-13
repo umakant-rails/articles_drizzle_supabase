@@ -70,8 +70,7 @@ const Register = () => {
       setLoading(true);
       dispatch(userRegister(formValues)).then(res => {
         setLoading(false);
-        // if(res.payload.user)
-        // redirect("/auth/login");
+        redirect("/auth/login");
       });
     } else if (Object.keys(errors).length > 0) {
       let errorMsgs = [] 
@@ -87,7 +86,7 @@ const Register = () => {
       <div className='grid grid-flow-row md:grid-cols-8 gap-4 mt-16 mb-16'>
         <div className='col-start-4 col-span-2'>
           <div className='md:col-span-4 px-4 py-7 border border-gray-300 rounded-md shadow-2xl shadow-gray-400'>
-            <form onSubmit={onFormSubmit} className="max-w-md mx-auto">
+            <form onSubmit={onFormSubmit} className="max-w-md mx-auto" autoComplete="off">
               <div className="text-xl text-center font-bold border-b-2 border-gray-300 py-3 mb-5">
                 Create Your Account
               </div>
@@ -103,6 +102,7 @@ const Register = () => {
                   placeholder="Email" 
                   onChange={onInputChange}
                   value = {formValues.email} 
+                  autoComplete="off"
                 />
               </div>
               <div className="relative z-0 w-full mb-5 group">
@@ -117,6 +117,7 @@ const Register = () => {
                   placeholder="Username" 
                   onChange={onInputChange}
                   value = {formValues.username}
+                  autoComplete="off"
                 />
               </div>
               <div className="relative z-0 w-full mb-5 group">
@@ -131,7 +132,7 @@ const Register = () => {
                   onChange={onInputChange}
                   placeholder="Password" 
                   value = {formValues.password}
-                  
+                  autoComplete="off"
                 />
               </div>
               <div className="relative z-0 w-full mb-5 group">
@@ -146,7 +147,7 @@ const Register = () => {
                   onChange={onInputChange}
                   placeholder="Confirm Password" 
                   value = {formValues.confirm_password}
-                  
+                  autoComplete="off"
                 />
               </div>
               <div className='text-xs mb-4'>
