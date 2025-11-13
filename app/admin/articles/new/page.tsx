@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { ReactTransliterate } from "react-transliterate";
 import { Editor } from 'primereact/editor';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { supabase } from '@/lib/supabaseClient';
+import { supabase } from '@/app/lib/supabaseClient';
 import { NewArticle } from '@/app/utils/interfaces';
 import { createArticle, getArticleBasicData } from '@/app/slilces/admin/adminArticleSlice';
 import { useRouter } from 'next/navigation';

@@ -15,6 +15,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
 import { useState } from 'react'
 import { toTitleCase } from '@/app/utils/utilityFunctions';
+import { signOut } from 'next-auth/react'
 
 interface AdminNavbarProps {
   sidebarOpen: boolean;
@@ -87,13 +88,13 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }
                     Change Password
                   </a>
                 </MenuItem>
-                {/* <MenuItem>
+                <MenuItem>
                   <a href='#' onClick={() => signOut({ callbackUrl: '/' })}
                     className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                   >
                     Sign Out
                   </a>
-                </MenuItem> */}
+                </MenuItem>
               </MenuItems>
             </Menu>
           </div>

@@ -19,6 +19,7 @@ export type RegisterErrors = {
 
 export type LoginForm = {email: string, password: string}
 
+export type CurrentUser = {id:number, email:string, username: string, roleId: number}
 export type User = InferSelectModel<typeof users>;
 export type NewUser = InferInsertModel<typeof users>;
 export type UpdateUser = {id: number, form: FormData | Partial<NewUser>;}

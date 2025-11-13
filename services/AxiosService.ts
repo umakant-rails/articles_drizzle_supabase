@@ -24,7 +24,7 @@ axiosObj.interceptors.response.use(
   async (error) => {
     // Optional: handle unauthorized (401) globally
     if (error.response?.status === 401) {
-      redirect("/login");
+      redirect("/auth/login");
     }
     // Ensure rejected response still has an `.ok` property
     return Promise.reject({

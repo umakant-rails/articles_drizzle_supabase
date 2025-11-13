@@ -1,10 +1,9 @@
 'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '@/lib/supabaseClient';
-import { Article, Author, NewArticle, Tag, UpdateArticle } from '@/app/utils/interfaces';
+import React, { useState, useEffect } from 'react';
+import { Author, NewArticle, Tag } from '@/app/utils/interfaces';
 import { useParams, useRouter} from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getArticle, getArticleBasicData, getArticles, updateAdminArticle } from '@/app/slilces/admin/adminArticleSlice';
+import { getArticle, updateAdminArticle } from '@/app/slilces/admin/adminArticleSlice';
 import { getAdminAuthors } from '@/app/slilces/admin/adminAuthorSlice';
 import { getAdminTags } from '@/app/slilces/admin/adminTagSlice';
 

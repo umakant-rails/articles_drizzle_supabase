@@ -10,7 +10,7 @@ export const getAdminAuthors = createAsyncThunk(
     try {
       // Optional: build query string if params exist
       const paramsStr = params ? getParamsStringFromHash(params) : "";
-      const response: AxiosResponse = await axiosObj.get(`/api/authors`);
+      const response: AxiosResponse = await axiosObj.get(`/api/admin/authors`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -27,7 +27,7 @@ export const createAdminAuthor = createAsyncThunk(
   "adminAuthor/createAdminAuthor",
   async ( form: NewAuthor,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.post(`/api/authors/`, form);
+      const response: AxiosResponse = await axiosObj.post(`/api/admin/authors/`, form);
       
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
@@ -47,7 +47,7 @@ export const updateAdminAuthor = createAsyncThunk(
   async ({ id, form }: UpdateAuthor,  { dispatch, rejectWithValue }) => {
     try {
       // Optional: build query string if params exist
-      const response: AxiosResponse = await axiosObj.put(`/api/authors/${id}`, form);
+      const response: AxiosResponse = await axiosObj.put(`/api/admin/authors/${id}`, form);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -64,7 +64,7 @@ export const deleteAdminAuthor = createAsyncThunk(
   "adminAuthor/deleteAdminAuthor",
   async (id: Number,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.delete(`/api/authors/${id}`);
+      const response: AxiosResponse = await axiosObj.delete(`/api/admin/authors/${id}`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }

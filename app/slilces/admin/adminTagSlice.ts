@@ -27,7 +27,7 @@ export const getAdminTags = createAsyncThunk(
     try {
       // Optional: build query string if params exist
       const paramsStr = params ? getParamsStringFromHash(params) : "";
-      const response: AxiosResponse = await axiosObj.get(`/api/tags`);
+      const response: AxiosResponse = await axiosObj.get(`/api/admin/tags`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -73,7 +73,7 @@ export const createAdminTag = createAsyncThunk(
   "adminTag/createAdminTag",
   async ( form: NewTag,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.post(`/api/tags/`, form);
+      const response: AxiosResponse = await axiosObj.post(`/api/admin/tags/`, form);
 
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
@@ -92,7 +92,7 @@ export const updateAdminTag = createAsyncThunk(
   async ({ id, form }: UpdateTag,  { dispatch, rejectWithValue }) => {
     try {
       // Optional: build query string if params exist
-      const response: AxiosResponse = await axiosObj.put(`/api/tags/${id}`, form);
+      const response: AxiosResponse = await axiosObj.put(`/api/admin/tags/${id}`, form);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -123,7 +123,7 @@ export const deleteAdminTag = createAsyncThunk(
   "adminTag/deleteAdminTag",
   async (id: Number,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.delete(`/api/tags/${id}`);
+      const response: AxiosResponse = await axiosObj.delete(`/api/admin/tags/${id}`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }

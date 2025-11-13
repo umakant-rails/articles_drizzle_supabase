@@ -1,6 +1,4 @@
 import { Article, Author, NewArticle, Tag, UpdateArticle } from "@/app/utils/interfaces";
-import { getParamsStringFromHash } from "@/app/utils/utilityFunctions";
-import { articles, authors, tags } from "@/db/schema";
 import axiosObj from "@/services/AxiosService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
@@ -9,7 +7,7 @@ export const getArticles = createAsyncThunk(
   "adminAuthor/getArticles",
   async (params: Record<string, any> | undefined, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.get(`/api/articles`);
+      const response: AxiosResponse = await axiosObj.get(`/api/admin/articles`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -27,7 +25,7 @@ export const getArticle = createAsyncThunk(
   "adminAuthor/getArticle",
   async (id: string, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.get(`/api/articles/${id}`);
+      const response: AxiosResponse = await axiosObj.get(`/api/admin/articles/${id}`);
 
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
@@ -62,7 +60,7 @@ export const createArticle = createAsyncThunk(
   "adminAuthor/createArticle",
   async (form: NewArticle,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.post(`/api/articles`, form);
+      const response: AxiosResponse = await axiosObj.post(`/api/admin/articles`, form);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -80,7 +78,7 @@ export const updateAdminArticle = createAsyncThunk(
   async ({ id, form }: UpdateArticle,  { dispatch, rejectWithValue }) => {
     try {
       // Optional: build query string if params exist
-      const response: AxiosResponse = await axiosObj.put(`/api/articles/${id}`, form);
+      const response: AxiosResponse = await axiosObj.put(`/api/admin/articles/${id}`, form);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
@@ -97,7 +95,7 @@ export const deleteAdminArticle = createAsyncThunk(
   "adminAuthor/deleteAdminArticle",
   async (id: Number,  { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.delete(`/api/articles/${id}`);
+      const response: AxiosResponse = await axiosObj.delete(`/api/admin/articles/${id}`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }

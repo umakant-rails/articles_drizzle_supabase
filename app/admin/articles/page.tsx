@@ -1,7 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { Article } from '@/app/utils/interfaces';
-import { supabase } from '@/lib/supabaseClient';
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { deleteAdminArticle, getArticles } from '@/app/slilces/admin/adminArticleSlice';
@@ -18,7 +16,7 @@ const AritcleList = () => {
       await fetchArticles();
     });
   }
-console.log(articles, "------------")
+
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
