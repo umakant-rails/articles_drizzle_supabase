@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Editor } from 'primereact/editor';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { NewArticle } from '@/app/utils/interfaces';
-import { createArticle, getArticleBasicData } from '@/app/slilces/admin/adminArticleSlice';
+import { createArticle, getnewArticleData } from '@/app/slilces/admin/adminArticleSlice';
 import { useRouter } from 'next/navigation';
 
 
@@ -23,7 +23,7 @@ const AddArticle = () => {
 	const [formValues, setFormValues] = useState<NewArticle>(articleObj);
 	const {tags, authors} = useAppSelector(state => state.adminArticle)
 
-	useEffect(() => {dispatch(getArticleBasicData({})); }, []);
+	useEffect(() => {dispatch(getnewArticleData({})); }, []);
 
 	const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;

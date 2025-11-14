@@ -39,8 +39,8 @@ export const getArticle = createAsyncThunk(
   }
 );
 
-export const getArticleBasicData = createAsyncThunk(
-  "adminAuthor/getArticleBasicData",
+export const getnewArticleData = createAsyncThunk(
+  "adminAuthor/getnewArticleData",
   async (id: Record<string, any> | null, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse = await axiosObj.get(`/api/admin/articles/new`);
@@ -142,7 +142,7 @@ const adminArticleSlice = createSlice({
       state.article = action.payload.article;
       // for (const [key, value] of Object.entries(action.payload)) { state[key] = value; }
     })
-    .addCase(getArticleBasicData.fulfilled, (state, action: PayloadAction<{ authors: Author[], tags: Tag[] }>) => {
+    .addCase(getnewArticleData.fulfilled, (state, action: PayloadAction<{ authors: Author[], tags: Tag[] }>) => {
       state.authors = action.payload.authors;
       state.tags = action.payload.tags;
       // for (const [key, value] of Object.entries(action.payload)) { state[key] = value; }
