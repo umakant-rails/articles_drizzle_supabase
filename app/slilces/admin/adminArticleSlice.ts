@@ -43,7 +43,7 @@ export const getArticleBasicData = createAsyncThunk(
   "adminAuthor/getArticleBasicData",
   async (id: Record<string, any> | null, { dispatch, rejectWithValue }) => {
     try {
-      const response: AxiosResponse = await axiosObj.get(`/api/articles/new`);
+      const response: AxiosResponse = await axiosObj.get(`/api/admin/articles/new`);
       if (response && response.status !== 200) {
         throw new Error(`HTTP error ${response.status}`);
       }
