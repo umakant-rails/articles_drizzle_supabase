@@ -63,8 +63,7 @@
     SUPABASE_SERVICE_ROLE_KEY=
     
     NEXTAUTH_SECRET=
-    
-    ```
+
 
   6. Run database migrations
   ```
@@ -72,10 +71,9 @@
   npx drizzle-kit generate
   npx drizzle-kit migrate
 
-  ```
 
   7. Start the development server
     ```
     npm run dev
 
-    ```
+
