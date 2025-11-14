@@ -55,15 +55,10 @@
     Create a .env.local file and add the following values:
     ```
     NEXT_PUBLIC_SUPABASE_URL=
-
     NEXT_PUBLIC_SUPABASE_ANON_KEY=
-    
     DATABASE_URL=
-    
     SUPABASE_SERVICE_ROLE_KEY=
-    
-    NEXTAUTH_SECRET=
-
+    NEXTAUTH_SECRET=```
 
   6. Run database migrations
   ```
