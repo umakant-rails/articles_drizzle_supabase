@@ -4,6 +4,7 @@
 
 ### Definitions:
   **Article:** An article refers to any poetic text created by a contributor. This may include poetry, songs, religious prayers, or similar creative writing.
+  
   **Contributor:** A user who creates an account and contributes articles to the application.
 
 ### User Roles & Permissions:
@@ -18,8 +19,10 @@
 ### Models / Database Tables:
   **Article: **
     Contains article content such as poetry or any written work associated with an author.
+    
   **Author:**
     Represents different authors for articles. Authors can only be created or managed by an Admin.
+    
   **Tag:** 
     Represents tags/categories assigned to articles. Tags can only be created or managed by an Admin.
 
