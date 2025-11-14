@@ -58,15 +58,18 @@
       NEXT_PUBLIC_SUPABASE_ANON_KEY=
       DATABASE_URL=
       SUPABASE_SERVICE_ROLE_KEY=
-      NEXTAUTH_SECRET=```
+      NEXTAUTH_SECRET=
+      ```
 
   5. Run database migrations
      
-    ```npx drizzle-kit generate
-    npx drizzle-kit migrate```
+    ```
+    npx drizzle-kit generate
+    npx drizzle-kit migrate
+    ```
 
   7. Start the development server
      
-    ```npm run dev```
-
-out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    ```
+    npm run dev
+    ```
