@@ -67,6 +67,4 @@
 ```
 
   6. Start the development server
-    ```
-npm run dev
-```
+    ```npm run dev```
