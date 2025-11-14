@@ -1,14 +1,14 @@
 'use client';
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getArticles } from "@/app/slilces/admin/adminArticleSlice";
+import { getPbArticles } from "@/app/slilces/public/publicArticleSlice";
 import Link from "next/link";
 
 export default function ArticleList() {
   const dispatch = useAppDispatch();
   const { articles } = useAppSelector(state => state.publicArticle)
 
-  useEffect(() => { dispatch(getArticles()); }, []);
+  useEffect(() => { dispatch(getPbArticles()); }, []);
 
   if(!articles){ return <div>Data is Loading ...</div> }
 

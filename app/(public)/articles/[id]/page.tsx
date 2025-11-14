@@ -3,7 +3,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import Link from "next/link";
-import { getArticle } from "@/app/slilces/public/publicArticleSlice";
+import { getPbArticle } from "@/app/slilces/public/publicArticleSlice";
 import { useParams } from "next/navigation";
 
 export default function ArticleShow() {
@@ -11,7 +11,7 @@ export default function ArticleShow() {
   const { id } = useParams<{ id: string }>();
   const { article } = useAppSelector(state => state.publicArticle)
 
-  useEffect(() => { dispatch(getArticle(id)); }, []);
+  useEffect(() => { dispatch(getPbArticle(id)); }, []);
   if(!article){ return <div>Data is Loading ...</div> }
 
   return (

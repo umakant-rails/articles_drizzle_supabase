@@ -15,10 +15,9 @@ import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 
 const navigation = [
-  { name: 'Dashboard', href: '#', current: true },
-  { name: 'Team', href: '#', current: false },
-  { name: 'Projects', href: '#', current: false },
-  { name: 'Calendar', href: '#', current: false },
+  { name: 'Articles', href: '/articles', current: true },
+  { name: 'Tags', href: '/tags', current: false },
+  { name: 'Authors', href: '/authors', current: false },
 ]
 
 export const PublicNavbar = () => {
@@ -71,14 +70,14 @@ export const PublicNavbar = () => {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <button
+            {/* <button
               type="button"
               className="relative rounded-full p-1 text-gray-400 focus:outline-2 focus:outline-offset-2 focus:outline-indigo-500 dark:hover:text-white"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">View notifications</span>
               <BellIcon aria-hidden="true" className="size-6" />
-            </button>
+            </button> */}
 
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">

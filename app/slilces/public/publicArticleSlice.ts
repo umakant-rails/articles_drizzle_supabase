@@ -3,8 +3,8 @@ import axiosObj from "@/services/AxiosService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
 
-export const getArticles = createAsyncThunk(
-  "publicArticle/getArticles",
+export const getPbArticles = createAsyncThunk(
+  "publicArticle/getPbArticles",
   async (params: Record<string, any> | undefined, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse = await axiosObj.get(`/api/public/articles`);
@@ -21,8 +21,8 @@ export const getArticles = createAsyncThunk(
   }
 );
 
-export const getArticle = createAsyncThunk(
-  "publicArticle/getArticle",
+export const getPbArticle = createAsyncThunk(
+  "publicArticle/getPbArticle",
   async (id: string, { dispatch, rejectWithValue }) => {
     try {
       const response: AxiosResponse = await axiosObj.get(`/api/public/articles/${id}`);
@@ -66,11 +66,11 @@ const publicArticleSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-    .addCase(getArticles.fulfilled, (state, action: PayloadAction<{ articles: ArticleWithRelations[]}>) => {
+    .addCase(getPbArticles.fulfilled, (state, action: PayloadAction<{ articles: ArticleWithRelations[]}>) => {
       state.articles = action.payload.articles;
       // for (const [key, value] of Object.entries(action.payload)) { state[key] = value; }
     })
-    .addCase(getArticle.fulfilled, (state, action: PayloadAction<{ article: Article}>) => {
+    .addCase(getPbArticle.fulfilled, (state, action: PayloadAction<{ article: Article}>) => {
       state.article = action.payload.article;
       // for (const [key, value] of Object.entries(action.payload)) { state[key] = value; }
     })
