@@ -18,7 +18,7 @@
     Cannot modify Tags, Authors, or Articles created by others
 
 ### Models / Database Tables:
-  **Article: **
+  **Article:**
     Contains article content such as poetry or any written work associated with an author.
     
   **Author:**
@@ -30,8 +30,11 @@
 ### Services & Features:
   1.User authentication via Supabase
   2.CRUD operations for:
+  
     **Admin:** Tags, Authors, and Articles
+    
     **User (Contributor):** Articles only
+    
   3.Integration with Drizzle ORM for database operations
   4.Supabase as the backend database service
 
