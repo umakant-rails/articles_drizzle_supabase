@@ -53,7 +53,6 @@
 
   4. Configure environment variables
     Create a .env.local file and add the following values:
-
     ```
     NEXT_PUBLIC_SUPABASE_URL=
     NEXT_PUBLIC_SUPABASE_ANON_KEY=
@@ -61,13 +60,13 @@
     SUPABASE_SERVICE_ROLE_KEY=
     NEXTAUTH_SECRET=```
 
-  6. Run database migrations
+  5. Run database migrations
   ```
   npx drizzle-kit generate
   npx drizzle-kit migrate
 ```
 
-  7. Start the development server
+  6. Start the development server
     ```
-    npm run dev
+npm run dev
 ```
