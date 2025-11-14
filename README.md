@@ -35,10 +35,10 @@
   Follow these steps to run the app locally:
 
   1. Clone the repository
-    git clone <repo-url>
+    ```git clone git@github.com:umakant-rails/articles_drizzle_supabase.git```
 
   2. Install dependencies
-    npm install
+    ```npm install```
 
   3. Set up Supabase
     Log in to the Supabase dashboard
@@ -46,18 +46,18 @@
 
   4. Configure environment variables
     Create a .env.local file and add the following values:
-      NEXT_PUBLIC_SUPABASE_URL=
+      ```NEXT_PUBLIC_SUPABASE_URL=
       NEXT_PUBLIC_SUPABASE_ANON_KEY=
       DATABASE_URL=
       SUPABASE_SERVICE_ROLE_KEY=
-      NEXTAUTH_SECRET=
+      NEXTAUTH_SECRET=```
 
   5. Run database migrations
-    npx drizzle-kit generate
-    npx drizzle-kit migrate
+    ```npx drizzle-kit generate
+    npx drizzle-kit migrate```
 
   6. Start the development server
-    npm run dev
+    ```npm run dev```
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
