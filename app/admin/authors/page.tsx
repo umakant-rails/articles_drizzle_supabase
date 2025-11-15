@@ -1,38 +1,30 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
-import { NewAuthor, Author, UpdateAuthor } from '@/app/utils/interfaces';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { NewAuthor, Author } from '@/app/utils/interfaces';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import { createAdminAuthor, deleteAdminAuthor, getAdminAuthors, updateAdminAuthor } from '@/app/slilces/admin/adminAuthorSlice';
 import { useAppDispatch, useAppSelector } from '@/store';
 
 const AuthorList = () => {
   const dispatch = useAppDispatch();
-  const aphabetList = "अ इ उ ऋ ए क ख ग घ च छ ज झ ट ठ ड ढ त थ द ध न प फ ब भ म य र ल व श ष स ह क्ष त्र ज्ञ श्र".split(' ');
-  const [currentPage, setCurrentPage] = useState(1);
   const authorObj: NewAuthor = {name: '', biography: ''};
   const [open, setOpen] = useState(false)
   const [authorList, setAuthorList] = useState<Author []>([]);
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [totalAuthorQnty, setTotalAuthorQnty] = useState(0);
-
   const [formValues, setFormValues] = useState<NewAuthor>(authorObj);
   const [editableAuthor, setEditableAuthor] = useState<Author>();
   const drawerCloseBtn = useRef(null);
   const { authors } = useAppSelector( state => state.adminAuthor);
 
-  useEffect( () => { getAllAuthors(); }, []);
+  useEffect( () => { dispatch(getAdminAuthors({})); }, []);
+  useEffect( () => { setAuthorList(authors); }, [authors]);
 
-  const getAllAuthors = () => {
-    dispatch(getAdminAuthors({})).then( res => { setAuthorList(res?.payload.authors); });
-  }
   const setAuthorForEditing = (id: number) => {
     const authorForEditing = authorList.find( author => author.id === id)
     setEditableAuthor(authorForEditing);
     setFormValues( {...formValues, name: authorForEditing?.name || '', biography: authorForEditing?.biography});
   }
+
   const deleteToAuthor = (id: number) => {
     dispatch(deleteAdminAuthor(id)).then(res => {
       const data = res.payload;
@@ -41,8 +33,7 @@ const AuthorList = () => {
     })
   }
 
-  const updateToAuthor = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    setIsLoading(true);
+  const updateToAuthor = async (e: React.MouseEvent<HTMLButtonElement>) => {;
     if(!editableAuthor?.id) {return}
 
     dispatch(updateAdminAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
@@ -56,11 +47,9 @@ const AuthorList = () => {
 
   const createNewAuthor =  async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-
     dispatch(createAdminAuthor(formValues)).then(res => {
       const author = res.payload.author;
-      getAllAuthors();
+      dispatch(getAdminAuthors({}));
       setOpen(false); setFormValues(authorObj);
     });
   }
@@ -172,7 +161,7 @@ const AuthorList = () => {
       <div className='md:col-start-2 md:col-span-10 shadow-2xl bg-white border border-gray-200 p-6'>
         <div className={`px-2 py-2 text-2xl text-blue-800 border-b-2 border-blue-500 shadow-lg 
           mb-5 font-bold bg-blue-50`}>
-          टैग्स सूची 
+          Author List
         </div>
         <section className="bg-gray-50">
           <div className="bg-white dark:bg-gray-800 relative sm:rounded-lg overflow-hidden">
@@ -215,10 +204,10 @@ const AuthorList = () => {
                 </thead>
                 <tbody className='text-xl'>
                   {
-                    authorList.length > 0 ? authorList.map( (author, index) => 
+                    authorList?.length > 0 ? authorList.map( (author, index) => 
                      <tr key={index} 
                         className="border-b border-gray-400 text-gray-800 cursor-pointer" >
-                        <td className='px-2 py-3'>{(currentPage-1)*10 + (index+1)}</td>
+                        <td className='px-2 py-3'>{index+1}.</td>
                         <td
                           className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {author.name}

@@ -1,45 +1,27 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { useDispatch, useSelector } from 'react-redux';
-import { NewTag, Tag, UpdateTag } from '@/app/utils/interfaces';
-import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { NewTag, Tag } from '@/app/utils/interfaces';
+import { Dialog, DialogPanel } from '@headlessui/react';
 import { createAdminTag, deleteAdminTag, getAdminTags, updateAdminTag } from '@/app/slilces/admin/adminTagSlice';
 import { useAppDispatch, useAppSelector } from '@/store';
-// import { ITEM_PER_PAGE } from '@/utils/types';
-// import Pagination from '@/app/shared/Pagination';
-// import { ReactTransliterate } from "react-transliterate";
-// import { confirmBeforeDeletion } from '@/utils/utilityFunctions';
-// import { 
-//   deleteTag, 
-//   getTags, 
-//   createTag, 
-//   updateTag 
-// } from '@/slices/user/userTagSlice';
-
 const tagObj = {name: ''};
 
 const TagList = () => {
   const dispatch = useAppDispatch();
-  const aphabetList = "अ इ उ ऋ ए क ख ग घ च छ ज झ ट ठ ड ढ त थ द ध न प फ ब भ म य र ल व श ष स ह क्ष त्र ज्ञ श्र".split(' ');
-  const [currentPage, setCurrentPage] = useState(1);
   const tagObj: NewTag = {name: ''};
   const [open, setOpen] = useState(false)
   const [tagList, setTagList] = useState<Tag []>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
-  const [totalTagQnty, setTotalTagQnty] = useState(0);
 
   const [formValues, setFormValues] = useState<NewTag>(tagObj);
   const [editableTag, setEditableTag] = useState<Tag>();
   const drawerCloseBtn = useRef(null);
   const { tags } = useAppSelector( state => state.adminTag);
 
-  useEffect( () => { getAllTags(); }, []);
+  useEffect( () => { dispatch(getAdminTags({})) }, []);
+  useEffect( () => { setTagList(tags); }, [tags]);
 
-  const getAllTags = () => {
-    dispatch(getAdminTags({})).then( res => { setTagList(res?.payload.tags); });
-  }
   const setTagForEditing = (id: number) => {
     const tagForEditing = tagList.find( tag => tag.id === id)
     setEditableTag(tagForEditing);
@@ -72,7 +54,7 @@ const TagList = () => {
 
     dispatch(createAdminTag(formValues)).then(res => {
       const tag = res.payload.tag;
-      getAllTags();
+      dispatch(getAdminTags({}));
       setOpen(false); setFormValues(tagObj);
     })
   }
@@ -167,7 +149,7 @@ const TagList = () => {
       <div className='md:col-start-2 md:col-span-10 shadow-2xl bg-white border border-gray-200 p-6'>
         <div className={`px-2 py-2 text-2xl text-blue-800 border-b-2 border-blue-500 shadow-lg 
           mb-5 font-bold bg-blue-50`}>
-          टैग्स सूची 
+          Tag List
         </div>
         <section className="bg-gray-50">
           <div className="bg-white dark:bg-gray-800 relative sm:rounded-lg overflow-hidden">
@@ -213,7 +195,7 @@ const TagList = () => {
                     tagList.length > 0 ? tagList.map( (tag, index) => 
                      <tr key={index} 
                         className="border-b border-gray-400 text-gray-800 cursor-pointer" >
-                        <td className='px-2 py-3'>{(currentPage-1)*10 + (index+1)}</td>
+                        <td className='px-2 py-3'>{ index+1 }.</td>
                         <td
                           className="px-2 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {tag.name}
@@ -242,17 +224,6 @@ const TagList = () => {
                 </tbody>
               </table>
             </div>
-            <nav className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
-              {/* {
-                totalTagQnty ? (
-                  <Pagination 
-                    showWidget={5} 
-                    totalItems={totalTagQnty}
-                    itemsPerPage={ITEM_PER_PAGE}
-                    pageChangeHandler= {handlePageClick}
-                  />) : ''
-              } */}
-            </nav>
           </div>
         </section>
         {popFunc()}

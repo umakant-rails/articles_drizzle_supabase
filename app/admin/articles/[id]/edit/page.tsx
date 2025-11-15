@@ -60,7 +60,7 @@ const ArticleEdit = () => {
       <div className='md:col-start-2 md:col-span-10 shadow-2xl bg-white border border-gray-200 p-6'>
         <div className={`px-2 py-2 text-2xl text-blue-800 border-b-2 border-blue-500 shadow-lg 
           mb-5 font-bold bg-blue-50`}>
-          रचना अद्यतन फॉर्म
+          Article Update Form
         </div>
         {
           !formValues.title && <div> Data is Loading ... </div>

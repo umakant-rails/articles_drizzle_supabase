@@ -1,5 +1,5 @@
 {
-  "name": "articles",
+  "name": "articles_drizzle_supabase",
   "version": "0.1.0",
   "private": true,
   "type": "module",
