@@ -2,19 +2,22 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { deleteAdminArticle, getArticles } from '@/app/slilces/admin/adminArticleSlice';
+import { deleteArticle, getArticles } from '@/app/slices/users/articleSlice';
+import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const AritcleList = () => {
   const dispatch = useAppDispatch();
-  const { articles } = useAppSelector(state => state.adminArticle);
+  const { articles } = useAppSelector(state => state.article);
 
   useEffect( () => { fetchArticles(); }, []);
   const fetchArticles = async () => { dispatch(getArticles()); };
   
-  const deleteArticle = async (id: number) => {
-    dispatch(deleteAdminArticle(id)).then( async (res) => {
-      await fetchArticles();
-    });
+  const deleteToArticle = async (id: number) => {
+    if(confirmBeforeDeletion()){
+      dispatch(deleteArticle(id)).then( async (res) => {
+        await fetchArticles();
+      });
+    }
   }
 
   return (
@@ -24,7 +27,7 @@ const AritcleList = () => {
           <h1 className="text-xl font-semibold text-gray-900 dark:text-white">Article List</h1>
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <Link href={`/admin/articles/new`}
+          <Link href={`/users/articles/new`}
             className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500"
           >
             Add Article
@@ -75,14 +78,14 @@ const AritcleList = () => {
                     </td>
                     <td className="py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                       <Link
-                        href={`/admin/articles/${article.id}/edit`}
+                        href={`/users/articles/${article.id}/edit`}
                         className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300"
                       >
                         Edit<span className="sr-only">, {article.id}</span>
                       </Link>
                       <button
                         type="button"
-                        onClick={e => deleteArticle(article.id)}
+                        onClick={e => deleteToArticle(article.id)}
                         className=" ms-4 text-red-600 hover:text-red-900 dark:text-ted-400 dark:hover:text-red-300"
                       >
                         Delete

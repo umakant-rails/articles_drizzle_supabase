@@ -1,8 +1,5 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-// import { ReactTransliterate } from "react-transliterate";
-import { Editor } from 'primereact/editor';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { NewArticle } from '@/app/utils/interfaces';
 import { createArticle, getnewArticleData } from '@/app/slices/users/articleSlice';

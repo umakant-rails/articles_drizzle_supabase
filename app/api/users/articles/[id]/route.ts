@@ -14,7 +14,7 @@ export async function GET(request: Request, context : { params: { id: string } }
     const articleId = await Number(id);
     const userId = user?.id as number;
     let result = null;
-    console.log(userId)
+
     if(user?.roleId === 1){
       result = await db.select()
         .from(articles)

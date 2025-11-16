@@ -1,5 +1,5 @@
 import { db } from "@/db/client";
-import { articles, authors, tags } from "@/db/schema";
+import { articles, authors, tags, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 import { getCurrentUser } from "../../auth/getCurrentUser";
@@ -16,17 +16,21 @@ export async function GET() {
         article: articles,
         author: authors,
         tag: tags,
+        user: users
       }).from(articles)
       .leftJoin(authors, eq(articles.authorId, authors.id))
-      .leftJoin(tags, eq(articles.tagId, tags.id));
+      .leftJoin(tags, eq(articles.tagId, tags.id))
+      .leftJoin(users, eq(articles.userId, users.id));
     } else {
       articlesList = await db.select({
         article: articles,
         author: authors,
         tag: tags,
+        user: users
       }).from(articles)
       .leftJoin(authors, eq(articles.authorId, authors.id))
       .leftJoin(tags, eq(articles.tagId, tags.id))
+      .leftJoin(users, eq(articles.userId, users.id))
       .where(eq(articles.userId, userId));
     }
 
@@ -43,11 +47,9 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const {user, response} = await getCurrentUser();
-    console.log(user, "+++++++++++++++++++++++")
     if(response) return response;
 
     let body = await request.json();
-    console.log(body)
     const {title, content, authorId, tagId, userId} = body;
    
     if (!title || !authorId || !tagId) {

@@ -18,7 +18,6 @@ export async function POST(req: Request) {
     const [registeredUser] = await db.insert(users).values({ username, email, roleId, password: hashed }).returning();;
     return NextResponse.json({ success: true, registeredUser });
   } catch (err) {
-    console.log(err)
     return NextResponse.json({ error: "Failed to register user" }, { status: 500 });
   }
 }

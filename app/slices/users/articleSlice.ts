@@ -1,4 +1,4 @@
-import { Article, Author, NewArticle, Tag, UpdateArticle } from "@/app/utils/interfaces";
+import { Article, Author, NewArticle, Tag, UpdateArticle, User } from "@/app/utils/interfaces";
 import axiosObj from "@/services/AxiosService";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
@@ -12,7 +12,7 @@ export const getArticles = createAsyncThunk(
         throw new Error(`HTTP error ${response.status}`);
       }
       const data = await response.data;
-      console.log()
+
       return data;
     } catch (error: any) {
       // dispatch(showError(error.message || "Failed to load authors"));
@@ -112,6 +112,7 @@ export interface ArticleWithRelations {
   article: Article;
   author: Author | null;
   tag: Tag | null;
+  user: User
 }
 
 interface ArticleDataState {
