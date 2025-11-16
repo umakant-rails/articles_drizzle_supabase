@@ -10,7 +10,7 @@ import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const articleObj: NewArticle = { 
   authorId: null,
-  userId: 1,
+  userId: 0,
   tagId: null,
   title: "",
   content: "",
@@ -30,6 +30,7 @@ const ArticleEdit = () => {
     dispatch(getTags()).then(response => setTags(response.payload.tags) );
     const newId = String(id)
     dispatch(getArticle(newId)).then(response => {
+
       const article = response.payload.article;
       setFormValues({...formValues,
         authorId: article.authorId || '',
@@ -39,30 +40,31 @@ const ArticleEdit = () => {
       })
     })
   }, [id]);
-  // const fetchArticles = async () => { dispatch(getArticles()); };
+
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   }
 
   const resetForm = () => {setFormValues(articleObj); }
-  const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { event.preventDefault(); resetForm();}
+  const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { router.push('/users/articles')}
 
   const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault();    
     dispatch(updateArticle({id: Number(id), form :formValues})).then(res => {
       router.push('/users/articles');
-    })
+    });
   }
-
+  
   const deleteToArticle = async (id: number) => {
     if(confirmBeforeDeletion()){
       dispatch(deleteArticle(id)).then( async (res) => {
-        router.push('/users/articles');
+        router.push('/users/articles')
       });
     }
   }
 
+  if(!article){ return <div>Data is Loading...</div>}
 
   return (
     <div className='grid md:grid-cols-12'>

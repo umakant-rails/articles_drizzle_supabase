@@ -10,7 +10,7 @@ import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const articleObj: NewArticle = { 
   authorId: null,
-  userId: 1,
+  userId: 0,
   tagId: null,
   title: "",
   content: "",
