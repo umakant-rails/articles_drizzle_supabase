@@ -1,7 +1,7 @@
 'use client';
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getPbTags } from "@/app/slilces/public/publicTagSlice";
+import { getPbTags } from "@/app/slices/public/publicTagSlice";
 
 export default function TagList() {
   const dispatch = useAppDispatch();

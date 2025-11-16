@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector, TypedUseSelectorHook } from "react-redux";
 // import rootReducer from "./rootReducer"; // adjust this import
-import reducers from '@/app/slilces';
+import reducers from '@/app/slices';
 
 export const store = configureStore({
   reducer: reducers

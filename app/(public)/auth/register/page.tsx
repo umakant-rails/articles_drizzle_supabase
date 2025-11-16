@@ -1,5 +1,5 @@
 'use client';
-import { userRegister } from "@/app/slilces/auth";
+import { userRegister } from "@/app/slices/auth";
 import { NewUser, RegisterErrors, RegisterForm } from "@/app/utils/interfaces";
 import { useAppDispatch } from "@/store";
 // import { userRegister } from "@/slices/authSlice";

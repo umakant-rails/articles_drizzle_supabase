@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getPbArticles } from "../slilces/public/publicArticleSlice";
+import { getPbArticles } from "../slices/public/publicArticleSlice";
 import Link from "next/link";
 
 export default function Home() {
@@ -23,7 +23,7 @@ export default function Home() {
         </div>
         <div>
           {
-            articles && articles.map( (article, index) => 
+            articles && articles?.map( (article, index) => 
               <div key={index} className="mb-4">
                 <div className="text-xl font-bold mb-2 shadoew-xl border-b border-gray-300 text-orange-600">
                   <Link href={`/articles/${article.article.id}`}>{article.article.title}</Link>

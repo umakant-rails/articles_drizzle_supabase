@@ -1,14 +1,18 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+// import { ReactTransliterate } from "react-transliterate";
+import { Editor } from 'primereact/editor';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { NewArticle } from '@/app/utils/interfaces';
-import { createArticle, getnewArticleData } from '@/app/slilces/admin/adminArticleSlice';
+import { createArticle, getnewArticleData } from '@/app/slices/users/articleSlice';
 import { useRouter } from 'next/navigation';
+import { useCurrentUser } from '@/app/hooks/useCurrentUser';
 
 
 const articleObj: NewArticle = { 
 	authorId: 0,
-	userId: 1,
+	userId: 0,
 	tagId: 0,
 	title: "",
 	content: "",
@@ -17,30 +21,23 @@ const articleObj: NewArticle = {
 const AddArticle = () => {
 	const dispatch = useAppDispatch();
 	const router = useRouter();
+	const user = useCurrentUser();
 	const [formValues, setFormValues] = useState<NewArticle>(articleObj);
-	const {tags, authors} = useAppSelector(state => state.adminArticle)
+	const {tags, authors} = useAppSelector(state => state.article)
 
 	useEffect(() => {dispatch(getnewArticleData({})); }, []);
 
 	const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
 		const { name, value } = event.target;
 		if(name === "tagId" || name === "authorId"){
-			setFormValues({ ...formValues, [name]: Number(value) }); 
-		} else { setFormValues({ ...formValues, [name]: value }); }
+			setFormValues({ ...formValues, [name]: Number(value), userId: user?.id }); 
+		} else { setFormValues({ ...formValues, [name]: value, userId: user?.id }); }
 	}
 
 	const resetForm = () => {setFormValues(articleObj); }
 	const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { event.preventDefault(); resetForm();}
 
-	const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-
-  	dispatch(createArticle(formValues)).then(res => {
-			router.push('/admin/articles');
-		})
-	}
-
-	const onArticleSubmit1 = async (event: React.MouseEvent<HTMLButtonElement>) => {
+	const onArticleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
   	dispatch(createArticle(formValues)).then(res => {
@@ -56,7 +53,7 @@ const AddArticle = () => {
 					mb-5 font-bold bg-blue-50`}>
 					New Article Form
 				</div>
-				<form className="py-5 px-5" onSubmit={onArticleSubmit}>
+				<form className="py-5 px-5">
 					<div className='grid md:grid-cols-12 gap-6 mb-3'>
 						<div className="col-span-6">
 							<label className="block mb-2 font-medium text-gray-900 dark:text-white">
@@ -121,7 +118,7 @@ const AddArticle = () => {
 						</div>
 					</div>
 					<div className='mb-3'>
-						<button type="button" onClick={onArticleSubmit1} 
+						<button type="button" onClick={onArticleSubmit} 
 							className="mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 							Add Article
 						</button>

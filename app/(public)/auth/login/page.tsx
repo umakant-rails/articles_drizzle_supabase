@@ -16,7 +16,7 @@ const Login = () => {
       if (session.user.roleId === 1) {
         router.push('/admin/articles');
       } else if (session.user.roleId === 2) {
-        router.push("/");
+        router.push("/users/articles");
       }
     }
   }, [status, session, router]);
@@ -35,7 +35,7 @@ const Login = () => {
       const role = session?.user?.roleId;
       localStorage.setItem('loginSuccess', 'You have logged in successfully.');
       if(role === 1){ router.push('/admin/articles'); }
-      else if(role === 2){ router.push('/articles'); }
+      else if(role === 2){ router.push('/users/articles'); }
     } else {
       // toast.error('Invalid Credentials.')
       alert('Invalid Credentials.')

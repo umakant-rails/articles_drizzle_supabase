@@ -3,9 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Author, NewArticle, Tag } from '@/app/utils/interfaces';
 import { useParams, useRouter} from 'next/navigation';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { getArticle, updateAdminArticle } from '@/app/slilces/admin/adminArticleSlice';
-import { getAdminAuthors } from '@/app/slilces/admin/adminAuthorSlice';
-import { getAdminTags } from '@/app/slilces/admin/adminTagSlice';
+import { deleteArticle, getArticle, updateArticle } from '@/app/slices/users/articleSlice';
+import { getAuthors } from '@/app/slices/users/authorSlice';
+import { getTags } from '@/app/slices/users/tagSlice';
+import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const articleObj: NewArticle = { 
   authorId: null,
@@ -22,13 +23,14 @@ const ArticleEdit = () => {
   const [formValues, setFormValues] = useState<NewArticle>(articleObj);
   const [authors, setAuthors] = useState<Author[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
-  const {article} = useAppSelector( state => state.adminArticle);
+  const {article} = useAppSelector( state => state.article);
 
   useEffect(() => {
-    dispatch(getAdminAuthors()).then(response => setAuthors(response.payload.authors) );
-    dispatch(getAdminTags()).then(response => setTags(response.payload.tags) );
+    dispatch(getAuthors()).then(response => setAuthors(response.payload.authors) );
+    dispatch(getTags()).then(response => setTags(response.payload.tags) );
     const newId = String(id)
     dispatch(getArticle(newId)).then(response => {
+
       const article = response.payload.article;
       setFormValues({...formValues,
         authorId: article.authorId || '',
@@ -38,29 +40,38 @@ const ArticleEdit = () => {
       })
     })
   }, [id]);
-  // const fetchArticles = async () => { dispatch(getArticles()); };
+
   const onInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   }
 
   const resetForm = () => {setFormValues(articleObj); }
-  const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { event.preventDefault(); resetForm();}
+  const onCancel = (event: React.MouseEvent<HTMLButtonElement>) => { router.push('/admin/articles')}
 
   const onArticleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispatch(updateAdminArticle({id: Number(id), form :formValues})).then(res => {
+    event.preventDefault();    
+    dispatch(updateArticle({id: Number(id), form :formValues})).then(res => {
       router.push('/admin/articles');
-    })
+    });
+  }
+  
+  const deleteToArticle = async (id: number) => {
+    if(confirmBeforeDeletion()){
+      dispatch(deleteArticle(id)).then( async (res) => {
+        router.push('/admin/articles')
+      });
+    }
   }
 
+  if(!article){ return <div>Data is Loading...</div>}
 
   return (
     <div className='grid md:grid-cols-12'>
       <div className='md:col-start-2 md:col-span-10 shadow-2xl bg-white border border-gray-200 p-6'>
         <div className={`px-2 py-2 text-2xl text-blue-800 border-b-2 border-blue-500 shadow-lg 
           mb-5 font-bold bg-blue-50`}>
-          Article Update Form
+          Article Edit Form
         </div>
         {
           !formValues.title && <div> Data is Loading ... </div>
@@ -134,6 +145,10 @@ const ArticleEdit = () => {
               <button type="submit" 
                 className="mr-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                 Update Article
+              </button>
+              <button type="button" onClick={e => deleteToArticle(article?.id)}
+                className="mr-5 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                Delete Article
               </button>
               <button type="button" onClick={onCancel}
                 className="text-white bg-gray-500 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

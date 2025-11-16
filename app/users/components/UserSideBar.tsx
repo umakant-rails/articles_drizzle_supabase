@@ -24,7 +24,7 @@ interface AdminNavbarProps {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+const UserSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => { setIsClient(true); }, []);
@@ -54,16 +54,13 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-4 ring-1 ring-white/10">
               <div className="flex h-16 shrink-0 items-center">
                 <Link href="/" className='flex'>
-                  <Image
-                    src="/images/hitlalju.png"
-                    alt="Shri Hit"
-                    className='rounded-full mr-4'
-                    width={32} // adjust as needed
-                    height={32} // adjust as needed
-                    priority
+                  <img
+                    alt="Your Company"
+                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                    className="h-8 w-auto mr-2"
                   />
                   <span className='flex justify-center text-2xl font-bold text-white place-items-center'>
-                    श्रीहित
+                    Articles-Blog
                   </span>
                 </Link>
               </div>
@@ -158,16 +155,13 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
           <div className={`flex h-16 shrink-0 items-center bg-blue-900 border-b border-r 
             border-gray-300 px-4`}>
             <Link href="/" className='flex'>
-              <Image
-                src="/images/hitlalju.png"
-                alt="Shri Hit"
-                className='rounded-full mr-4'
-                width={32} // adjust as needed
-                height={32} // adjust as needed
-                priority
+              <img
+                alt="Your Company"
+                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                className="h-8 w-auto mr-2"
               />
               <span className='flex justify-center text-2xl font-bold text-white place-items-center'>
-                श्रीहित
+                Articles-Blog
               </span>
             </Link>
           </div>
@@ -257,4 +251,4 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
   );
 };
 
-export default AdminSideBar;
+export default UserSideBar;

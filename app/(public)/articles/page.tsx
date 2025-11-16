@@ -1,7 +1,7 @@
 'use client';
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getPbArticles } from "@/app/slilces/public/publicArticleSlice";
+import { getPbArticles } from "@/app/slices/public/publicArticleSlice";
 import Link from "next/link";
 
 export default function ArticleList() {
@@ -22,7 +22,7 @@ export default function ArticleList() {
         </div>
         <div>
           {
-            articles && articles.map( (article, index) => 
+            articles?.map( (article, index) => 
               <div key={index} className="mb-4">
                 <div className="text-xl font-bold mb-2 shadoew-xl border-b border-gray-300 text-orange-600">
                   <Link href={`/articles/${article.article.id}`}>{article.article.title}</Link>

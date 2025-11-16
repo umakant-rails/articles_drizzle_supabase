@@ -54,16 +54,13 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-4 ring-1 ring-white/10">
               <div className="flex h-16 shrink-0 items-center">
                 <Link href="/" className='flex'>
-                  <Image
-                    src="/images/hitlalju.png"
-                    alt="Shri Hit"
-                    className='rounded-full mr-4'
-                    width={32} // adjust as needed
-                    height={32} // adjust as needed
-                    priority
+                  <img
+                    alt="Your Company"
+                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                    className="h-8 w-auto"
                   />
                   <span className='flex justify-center text-2xl font-bold text-white place-items-center'>
-                    श्रीहित
+                    Articles-Blog
                   </span>
                 </Link>
               </div>
@@ -157,17 +154,14 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 pb-4">
           <div className={`flex h-16 shrink-0 items-center bg-blue-900 border-b border-r 
             border-gray-300 px-4`}>
-            <Link href="/" className='flex'>
-              <Image
-                src="/images/hitlalju.png"
-                alt="Shri Hit"
-                className='rounded-full mr-4'
-                width={32} // adjust as needed
-                height={32} // adjust as needed
-                priority
+            <img
+                alt="Your Company"
+                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                className="h-8 w-auto mr-2"
               />
+            <Link href="/" className='flex'>
               <span className='flex justify-center text-2xl font-bold text-white place-items-center'>
-                श्रीहित
+                Articles-Blog
               </span>
             </Link>
           </div>
@@ -216,9 +210,7 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
                             <DisclosurePanel as="ul" className="mt-1 px-1">
                               {item.childs.map((subItem) => (
                                 <li key={subItem.label} className='bg-gray-700 mb-1'>
-                                  <DisclosureButton
-                                    as="a"
-                                    href={subItem.href}
+                                  <Link href={subItem.href} 
                                     className={`
                                       block rounded-md py-2 pr-2 pl-9 text-sm/6 text-gray-400 font-bold b 
                                       ${
@@ -229,7 +221,7 @@ const AdminSideBar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen 
                                     `}
                                   >
                                     {subItem.label}
-                                  </DisclosureButton>
+                                  </Link>
                                 </li>
                               ))}
                             </DisclosurePanel>

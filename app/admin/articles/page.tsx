@@ -2,19 +2,22 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { deleteAdminArticle, getArticles } from '@/app/slilces/admin/adminArticleSlice';
+import { deleteArticle, getArticles } from '@/app/slices/users/articleSlice';
+import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const AritcleList = () => {
   const dispatch = useAppDispatch();
-  const { articles } = useAppSelector(state => state.adminArticle);
+  const { articles } = useAppSelector(state => state.article);
 
   useEffect( () => { fetchArticles(); }, []);
   const fetchArticles = async () => { dispatch(getArticles()); };
   
-  const deleteArticle = async (id: number) => {
-    dispatch(deleteAdminArticle(id)).then( async (res) => {
-      await fetchArticles();
-    });
+  const deleteToArticle = async (id: number) => {
+    if(confirmBeforeDeletion()){
+      dispatch(deleteArticle(id)).then( async (res) => {
+        await fetchArticles();
+      });
+    }
   }
 
   return (
@@ -25,7 +28,7 @@ const AritcleList = () => {
         </div>
         <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
           <Link href={`/admin/articles/new`}
-            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500"
+            className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-base font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:bg-indigo-500 dark:hover:bg-indigo-400 dark:focus-visible:outline-indigo-500"
           >
             Add Article
           </Link>
@@ -82,7 +85,7 @@ const AritcleList = () => {
                       </Link>
                       <button
                         type="button"
-                        onClick={e => deleteArticle(article.id)}
+                        onClick={e => deleteToArticle(article.id)}
                         className=" ms-4 text-red-600 hover:text-red-900 dark:text-ted-400 dark:hover:text-red-300"
                       >
                         Delete

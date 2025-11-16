@@ -13,14 +13,21 @@ export async function GET(request: Request, context : { params: { id: string } }
     const { id } = await context.params;
     const articleId = await Number(id);
     const userId = user?.id as number;
-
-    const result = await db.select()
-      .from(articles)
-      .where(and(
-        eq(articles.id, articleId),
-        eq(articles.userId, userId)
-      ));
-
+    let result = null;
+    console.log(userId)
+    if(user?.roleId === 1){
+      result = await db.select()
+        .from(articles)
+        .where(eq(articles.id, articleId));
+    } else {
+      result = await db.select()
+        .from(articles)
+        .where(and(
+          eq(articles.id, articleId),
+          eq(articles.userId, userId)
+        ));
+    }
+   
     if (result.length === 0) {
       return NextResponse.json(
         { success: false, message: "Article not found" },

@@ -18,7 +18,7 @@ interface AdminNavbarProps {
   setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const AdminNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+const UserNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   // const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -100,4 +100,4 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ sidebarOpen, setSidebarOpen }
   );
 }
 
-export default AdminNavbar;
+export default UserNavbar;

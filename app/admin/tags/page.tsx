@@ -1,11 +1,11 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { NewTag, Tag } from '@/app/utils/interfaces';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { createAdminTag, deleteAdminTag, getAdminTags, updateAdminTag } from '@/app/slilces/admin/adminTagSlice';
+import { createTag, deleteTag, getTags, updateTag } from '@/app/slices/users/tagSlice';
 import { useAppDispatch, useAppSelector } from '@/store';
-const tagObj = {name: ''};
+import { NewTag, Tag, UpdateTag } from '@/app/utils/interfaces';
+import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const TagList = () => {
   const dispatch = useAppDispatch();
@@ -17,29 +17,34 @@ const TagList = () => {
   const [formValues, setFormValues] = useState<NewTag>(tagObj);
   const [editableTag, setEditableTag] = useState<Tag>();
   const drawerCloseBtn = useRef(null);
-  const { tags } = useAppSelector( state => state.adminTag);
+  const { tags } = useAppSelector( state => state.tag);
 
-  useEffect( () => { dispatch(getAdminTags({})) }, []);
-  useEffect( () => { setTagList(tags); }, [tags]);
+  useEffect( () => { getAllTags(); }, []);
 
+  const getAllTags = () => {
+    dispatch(getTags({})).then( res => { setTagList(res?.payload.tags); });
+  }
   const setTagForEditing = (id: number) => {
     const tagForEditing = tagList.find( tag => tag.id === id)
+
     setEditableTag(tagForEditing);
     setFormValues( {...formValues, name: tagForEditing?.name || ''});
   }
   const deleteToTag = (id: number) => {
-    dispatch(deleteAdminTag(id)).then(res => {
-      const data = res.payload;
-      const udpateList = tagList.filter(tag => tag.id !== id );
-      setTagList(udpateList);
-    })
+    if(confirmBeforeDeletion()){
+      dispatch(deleteTag(id)).then(res => {
+        const data = res.payload;
+        const udpateList = tagList.filter(tag => tag.id !== id );
+        setTagList(udpateList);
+      });
+    }
   }
 
   const updateToTag = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsLoading(true);
-    if(!editableTag?.id) {return}
+    if(!editableTag?.id) { return; }
 
-    dispatch(updateAdminTag({ id: editableTag.id, form: formValues })).then(res => {
+    dispatch(updateTag({ id: editableTag.id, form: formValues })).then(res => {
       const data = res.payload;
       const udpateList = tagList.map(tag =>
         tag.id === data.tag.id ? data.tag : tag
@@ -52,9 +57,9 @@ const TagList = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    dispatch(createAdminTag(formValues)).then(res => {
+    dispatch(createTag(formValues)).then(res => {
       const tag = res.payload.tag;
-      dispatch(getAdminTags({}));
+      getAllTags();
       setOpen(false); setFormValues(tagObj);
     })
   }

@@ -43,9 +43,11 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const {user, response} = await getCurrentUser();
+    console.log(user, "+++++++++++++++++++++++")
     if(response) return response;
 
     let body = await request.json();
+    console.log(body)
     const {title, content, authorId, tagId, userId} = body;
    
     if (!title || !authorId || !tagId) {

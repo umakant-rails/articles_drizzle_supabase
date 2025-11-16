@@ -1,7 +1,7 @@
 'use client';
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
-import { getPbAuthors } from "@/app/slilces/public/publicAuthorSlice";
+import { getPbAuthors } from "@/app/slices/public/publicAuthorSlice";
 import Link from "next/link";
 
 export default function AuthorList() {

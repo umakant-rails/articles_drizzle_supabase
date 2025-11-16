@@ -18,3 +18,5 @@ export const getParamsStringFromHash = (
 
   return arr.length ? `?${arr.join("&")}` : "";
 };
+
+export const confirmBeforeDeletion = () => { return window.confirm('Are you sure to delete this record ?'); }

@@ -3,7 +3,7 @@
 import { useAppDispatch, useAppSelector } from "@/store";
 import { useEffect } from "react";
 import Link from "next/link";
-import { getPbArticle } from "@/app/slilces/public/publicArticleSlice";
+import { getPbArticle } from "@/app/slices/public/publicArticleSlice";
 import { useParams } from "next/navigation";
 
 export default function ArticleShow() {
@@ -20,13 +20,10 @@ export default function ArticleShow() {
       <div className="col-span-8">
         <div className={`px-2 py-2 text-2xl text-blue-800 border-b-2 border-blue-500 shadow-lg 
           mb-5 font-bold bg-blue-50`}>
-          Article List
+          Article : {article?.title}
         </div>
         <div className="mb-4">
-          <div className="text-xl font-bold mb-2 shadoew-xl border-b border-gray-300 text-orange-600">
-            <Link href={`/articles/${article.id}`}>{article.title}</Link>
-          </div>
-          <div>{article.content}</div>
+          {article.content}
         </div>
         <div className="my-4">
           <Link href="/articles" className="text-blue-600">Article List</Link>

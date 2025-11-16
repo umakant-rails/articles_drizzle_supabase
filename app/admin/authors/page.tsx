@@ -1,10 +1,11 @@
 'use client';
 import React, { useEffect, useState, useRef } from 'react';
-import Link from 'next/link';
-import { NewAuthor, Author } from '@/app/utils/interfaces';
+import { NewAuthor, Author, UpdateAuthor } from '@/app/utils/interfaces';
 import { Dialog, DialogPanel } from '@headlessui/react';
-import { createAdminAuthor, deleteAdminAuthor, getAdminAuthors, updateAdminAuthor } from '@/app/slilces/admin/adminAuthorSlice';
+import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/app/slices/users/authorSlice';
 import { useAppDispatch, useAppSelector } from '@/store';
+import Link from 'next/link';
+import { confirmBeforeDeletion } from '@/app/utils/utilityFunctions';
 
 const AuthorList = () => {
   const dispatch = useAppDispatch();
@@ -14,9 +15,9 @@ const AuthorList = () => {
   const [formValues, setFormValues] = useState<NewAuthor>(authorObj);
   const [editableAuthor, setEditableAuthor] = useState<Author>();
   const drawerCloseBtn = useRef(null);
-  const { authors } = useAppSelector( state => state.adminAuthor);
+  const { authors } = useAppSelector( state => state.author);
 
-  useEffect( () => { dispatch(getAdminAuthors({})); }, []);
+  useEffect( () => { dispatch(getAuthors({})); }, []);
   useEffect( () => { setAuthorList(authors); }, [authors]);
 
   const setAuthorForEditing = (id: number) => {
@@ -26,17 +27,19 @@ const AuthorList = () => {
   }
 
   const deleteToAuthor = (id: number) => {
-    dispatch(deleteAdminAuthor(id)).then(res => {
-      const data = res.payload;
-      const udpateList = authorList.filter(author => author.id !== id );
-      setAuthorList(udpateList);
-    })
+    if(confirmBeforeDeletion()){
+      dispatch(deleteAuthor(id)).then(res => {
+        const data = res.payload;
+        const udpateList = authorList.filter(author => author.id !== id );
+        setAuthorList(udpateList);
+      });
+    }
   }
 
   const updateToAuthor = async (e: React.MouseEvent<HTMLButtonElement>) => {;
     if(!editableAuthor?.id) {return}
 
-    dispatch(updateAdminAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
+    dispatch(updateAuthor({ id: editableAuthor.id, form: formValues })).then(res => {
       const data = res.payload;
       const udpateList = authorList.map(author =>
         author.id === data.author.id ? data.author : author
@@ -47,9 +50,9 @@ const AuthorList = () => {
 
   const createNewAuthor =  async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(createAdminAuthor(formValues)).then(res => {
+    dispatch(createAuthor(formValues)).then(res => {
       const author = res.payload.author;
-      dispatch(getAdminAuthors({}));
+      dispatch(getAuthors({}));
       setOpen(false); setFormValues(authorObj);
     });
   }
